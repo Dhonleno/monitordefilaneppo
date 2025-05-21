@@ -1,5 +1,4 @@
 import time
-import pyttsx3
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
@@ -7,6 +6,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import StaleElementReferenceException
 from credenciais import USUARIO, SENHA
+from voz import anunciar_cliente, listar_vozes
 
 def login_e_abrir_dashboard(driver):
     print("Iniciando login...")
@@ -87,31 +87,6 @@ def obter_clientes_em_espera(driver):
         print(f"Erro ao obter clientes em espera: {e}")
         return []
 
-def anunciar_cliente(nucleo, voz_id=None):
-    # Extrai apenas o nome do núcleo, removendo o número de celular se houver
-    nome_nucleo = nucleo.split(' - ')[0] if ' - ' in nucleo else nucleo
-    # Corrige pronúncia específica para núcleos
-    if nome_nucleo.strip().lower() == "reproducao":
-        nome_nucleo = "Reprodução"
-    elif nome_nucleo.strip().lower() == "conexao de bastao e balanca":
-        nome_nucleo = "Conexão de bastão e balança"
-    elif nome_nucleo.strip().lower() == "pmg e comunicacao para associacao":
-        nome_nucleo = "PMG e Comunicação para Associação"
-    engine = pyttsx3.init()
-    if voz_id is not None:
-        voices = engine.getProperty('voices')
-        if 0 <= voz_id < len(voices):
-            engine.setProperty('voice', voices[voz_id].id)
-    engine.say(f"Atenção! Cliente aguardando no núcleo {nome_nucleo}.")
-    engine.runAndWait()
-
-def listar_vozes():
-    engine = pyttsx3.init()
-    voices = engine.getProperty('voices')
-    for idx, voice in enumerate(voices):
-        print(f"Voz {idx}: {voice.name} - {voice.id}")
-    engine.stop()
-
 def buscar_status_grupos_dashboard(driver):
     status_grupos = []
     try:
@@ -180,6 +155,8 @@ def buscar_status_grupos_dashboard(driver):
 
 def monitorar_fila():
     chrome_options = Options()
+    chrome_options.add_argument("--start-maximized")  # Abre o navegador maximizado
+    # chrome_options.add_argument("--kiosk")  # Alternativa: modo tipo F11 (tela cheia), use se preferir
     # chrome_options.add_argument("--headless")  # Descomente para rodar em modo visível para debug
     # Usa Selenium Manager para baixar e gerenciar o ChromeDriver automaticamente
     driver = webdriver.Chrome(options=chrome_options)
@@ -231,7 +208,5 @@ def monitorar_fila():
 if __name__ == "__main__":
     listar_vozes()
     # monitorar_fila()  # Comente esta linha para testar as vozes
-    
 
-    
     monitorar_fila()
