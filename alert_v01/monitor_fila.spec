@@ -1,12 +1,18 @@
 # -*- mode: python ; coding: utf-8 -*-
 
+from PyInstaller.utils.hooks import collect_submodules
+
+# O Selenium faz importação preguiçosa (lazy) dos submódulos; sem isso o
+# executável falha com "No module named 'selenium.webdriver.chrome.webdriver'".
+hiddenimports = collect_submodules('selenium')
+
 
 a = Analysis(
     ['monitor_fila.py'],
     pathex=[],
     binaries=[],
     datas=[('credenciais.py', '.'), ('chromedriver-win64', 'chromedriver-win64')],
-    hiddenimports=[],
+    hiddenimports=hiddenimports,
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],

@@ -18,7 +18,7 @@ def login_e_abrir_dashboard(driver):
     driver.find_element(By.NAME, "username").send_keys(USUARIO)
     driver.find_element(By.NAME, "password").send_keys(SENHA)
     btn_login = WebDriverWait(driver, 10).until(
-        EC.element_to_be_clickable((By.TAG_NAME, "button"))
+        EC.element_to_be_clickable((By.ID, "btnLogin"))
     )
     btn_login.click()
     print("Login enviado. Aguardando redirecionamento...")
