@@ -1,0 +1,7 @@
+# Bytecode / cache do Python
+__pycache__/
+*.py[cod]
+
+# Artefatos de build do PyInstaller
+build/
+dist/
