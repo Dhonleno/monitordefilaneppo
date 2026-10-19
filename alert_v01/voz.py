@@ -24,8 +24,10 @@ _CACHE_AUDIO = {}
 
 
 def _nome_para_fala(nome_nucleo):
-    base = nome_nucleo.split(' - ')[0].strip().lower()
-    return NOMES_NUCLEOS.get(base, nome_nucleo)
+    # O título vem como "Núcleo - <contato/número>"; falamos apenas o núcleo,
+    # nunca o restante (que pode conter o número do contato).
+    base = nome_nucleo.split(' - ')[0].strip()
+    return NOMES_NUCLEOS.get(base.lower(), base)
 
 
 def _sintetizar(texto):
